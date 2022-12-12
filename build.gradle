@@ -11,6 +11,7 @@ buildscript {
         build_tools_version = "33.0.0"
 
         compose_version = '1.3.1'
+        compose_bom_version = '2022.10.00'
         accompanist_version = '0.24.11-rc'
 
         core_ktx_version = '1.9.0'

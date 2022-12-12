@@ -9,7 +9,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
+import pn.android.compose.lifecycle.ComposableLifecycle
 import pn.android.core.extensions.showToast
 import pn.android.ui.theme.PnandroidTheme
 
@@ -21,6 +23,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             PnandroidTheme {
+
+                ComposableLifecycle { _, event ->
+                }
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),

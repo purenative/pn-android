@@ -18,3 +18,4 @@ rootProject.name = "pn-android"
 
 include ':sample'
 include ':core'
+include ':compose'
