@@ -53,6 +53,9 @@ android {
 
 dependencies {
 
+    //implementation 'com.github.purenative.pn-android:core:0.0.1'
+    //implementation 'com.github.purenative.pn-android:compose:0.0.1'
+
     implementation project(":core")
     implementation project(":compose")
 
