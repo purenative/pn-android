@@ -18,7 +18,7 @@ buildscript {
         activity_compose_version = '1.6.1'
 
         library_version = '0.0.1'
-        group_id = 'com.github.purenative'
+        group_id = 'com.github.purenative.pn.android'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
