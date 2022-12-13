@@ -1,3 +1,12 @@
+## Modules
+
+### [Core](./core/)
+Common Android things.
+### [Compose](./compose/)
+Jetpack Compose things.
+### [Sample](./sample/)
+Sample App for research and development.
+
 ## Installation
 
 ### Gradle
