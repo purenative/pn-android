@@ -27,6 +27,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -52,6 +53,8 @@ android {
 }
 
 dependencies {
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_libs_version"
 
     //implementation 'com.github.purenative.pn-android:core:0.0.1'
     //implementation 'com.github.purenative.pn-android:compose:0.0.1'
