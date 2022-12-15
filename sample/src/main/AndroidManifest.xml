@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".PnApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +12,7 @@
         android:theme="@style/Theme.Pnandroid"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".PnActivity"
             android:exported="true"
             android:theme="@style/Theme.Pnandroid">
             <intent-filter>

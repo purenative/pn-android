@@ -59,7 +59,7 @@ internal fun LazyListState.isAtLastPosition(rememberedIndex: MutableState<Int>):
 fun CalendarYear(
     selectionMode: CalendarSelectionMode,
     startMonth: YearMonth = YearMonth.now(),
-    countMonth: Int = 5,
+    countMonth: Int = 10 * 12,
     textStyle: TextStyle,
     selector: CalendarSelector,
     events: List<CalendarEvent>,

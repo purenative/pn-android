@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -50,26 +52,60 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
+
 }
 
 dependencies {
 
+    // desugaring for date api
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_libs_version"
 
     //implementation 'com.github.purenative.pn-android:core:0.0.1'
     //implementation 'com.github.purenative.pn-android:compose:0.0.1'
 
+    // pn android things
     implementation project(":core")
     implementation project(":compose")
 
+    // androidx - utility
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version"
     implementation "androidx.activity:activity-compose:$activity_compose_version"
 
+    // compose - ui
     implementation platform("androidx.compose:compose-bom:$compose_bom_version")
     implementation "androidx.compose.ui:ui"
     implementation "androidx.compose.material:material"
     implementation "androidx.compose.ui:ui-tooling-preview"
     debugImplementation "androidx.compose.ui:ui-tooling"
+
+    // compose destinations - navigation
+    implementation "io.github.raamcosta.compose-destinations:animations-core:$compose_destinations_version"
+    ksp "io.github.raamcosta.compose-destinations:ksp:$compose_destinations_version"
+
+    // orbit - mvi
+    implementation "org.orbit-mvi:orbit-core:$orbit_version"
+    implementation "org.orbit-mvi:orbit-viewmodel:$orbit_version"
+
+    // retrofit - http client
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
+
+    // koin - di
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+
+    // timber - logger
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+
 
 }
