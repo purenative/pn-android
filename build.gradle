@@ -21,6 +21,7 @@ buildscript {
 
         orbit_version = '4.5.0'
         timber_version = '5.0.1'
+        retrofit_version = '2.9.0'
 
         library_version = '2023.04.00'
         group_id = 'com.github.purenative.pn-android'
