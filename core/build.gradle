@@ -40,6 +40,7 @@ dependencies {
     implementation "org.orbit-mvi:orbit-viewmodel:$orbit_version"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_runtime_ktx_version"
+    implementation "io.github.raamcosta.compose-destinations:animations-core:$compose_destinations_version"
 
     implementation "com.jakewharton.timber:timber:$timber_version"
 
