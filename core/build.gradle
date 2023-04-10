@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'maven-publish'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -34,6 +35,14 @@ android {
 }
 
 dependencies {
+
+    implementation "org.orbit-mvi:orbit-core:$orbit_version"
+    implementation "org.orbit-mvi:orbit-viewmodel:$orbit_version"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_runtime_ktx_version"
+
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
 }
 
 publishing {
