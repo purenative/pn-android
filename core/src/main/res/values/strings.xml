@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="play_market_not_found">Play market not found</string>
+    <string name="share">Share</string>
+    <string name="sharing_app_not_found">Sharing app not found</string>
+    <string name="browser_not_found">Browser not found</string>
+</resources>
