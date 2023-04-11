@@ -53,6 +53,10 @@ dependencies {
 
     implementation "io.github.raamcosta.compose-destinations:animations-core:$compose_destinations_version"
 
+    implementation "io.coil-kt:coil-compose:$coil_version"
+    implementation "io.coil-kt:coil-video:$coil_version"
+    implementation "io.coil-kt:coil-gif:$coil_version"
+
 }
 
 publishing {
