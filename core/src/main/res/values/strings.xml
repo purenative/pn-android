@@ -4,4 +4,7 @@
     <string name="share">Share</string>
     <string name="sharing_app_not_found">Sharing app not found</string>
     <string name="browser_not_found">Browser not found</string>
+    <string name="email_client_not_found">Email client not found</string>
+    <string name="dialer_not_found">Dialer not found</string>
+    <string name="sms_client_not_found">SMS client not found</string>
 </resources>

@@ -1,10 +1,15 @@
 package pn.android.core.extensions
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import pn.android.core.R
 
 const val MARKET_DETAILS_ID = "market://details?id="
@@ -71,3 +76,98 @@ fun Context.openUrl(url: String) {
         showToast(getString(R.string.browser_not_found))
     }
 }
+
+fun Context.openEmail(
+    email: String,
+    subject: String,
+    body: String = ""
+) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse("mailto:$email?&subject=${Uri.encode(subject)}&body=${Uri.encode(body)}")
+    }
+    try {
+        startActivity(intent)
+    } catch (e: Exception) {
+        showToast(getString(R.string.email_client_not_found))
+    }
+}
+
+fun Context.openCall(number: String) {
+    try {
+        val callIntent = Intent(Intent.ACTION_DIAL)
+        callIntent.data = Uri.parse("tel:$number")
+        startActivity(callIntent)
+    } catch (e: Exception) {
+        showToast(getString(R.string.dialer_not_found))
+    }
+}
+
+fun Context.sendSms(
+    number: String,
+    text: String = ""
+) {
+    try {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("sms:$number")
+        ).apply {
+            putExtra("sms_body", text)
+        }
+        startActivity(intent)
+    } catch (e: Exception) {
+        showToast(getString(R.string.sms_client_not_found))
+    }
+}
+
+
+fun Context.copyToClipboard(content: String) {
+    ContextCompat.getSystemService(this, ClipboardManager::class.java)?.let {
+        val clip = ClipData.newPlainText("clipboard", content)
+        it.setPrimaryClip(clip)
+    }
+}
+
+fun Context.showAlertDialog(
+    positiveButtonLabel: String,
+    title: String,
+    message: String,
+    actionOnPositiveButton: () -> Unit
+) {
+    val builder = AlertDialog.Builder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setCancelable(false)
+        .setPositiveButton(positiveButtonLabel) { dialog, id ->
+            dialog.cancel()
+            actionOnPositiveButton()
+        }
+    val alert = builder.create()
+    alert?.show()
+}
+
+val Context.versionName: String?
+    get() = try {
+        val pInfo = packageManager.getPackageInfo(packageName, 0)
+        pInfo?.versionName
+    } catch (e: Exception) {
+        null
+    }
+
+val Context.versionCode: Long?
+    get() = try {
+        val pInfo = packageManager.getPackageInfo(packageName, 0)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            pInfo?.longVersionCode
+        } else {
+            @Suppress("DEPRECATION")
+            pInfo?.versionCode?.toLong()
+        }
+    } catch (e: Exception) {
+        null
+    }
+
+
+
+
+
+
