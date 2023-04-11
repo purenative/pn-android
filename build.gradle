@@ -12,7 +12,7 @@ buildscript {
 
         compose_version = '1.4.4'
         compose_bom_version = '2023.03.00'
-        compose_destinations_version = '1.8.36-beta'
+        compose_destinations_version = '1.8.38-beta'
         accompanist_version = '0.30.0'
 
         core_ktx_version = '1.9.0'
