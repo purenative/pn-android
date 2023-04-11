@@ -4,16 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import pn.android.compose.lifecycle.ComposableLifecycle
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.google.accompanist.pager.ExperimentalPagerApi
+import pn.android.compose.components.images.viewer.ImageGallery
+import pn.android.compose.components.images.viewer.rememberViewerState
 import pn.android.core.extensions.showToast
 import pn.android.ui.theme.PnandroidTheme
 
+@OptIn(ExperimentalPagerApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,30 +28,35 @@ class MainActivity : ComponentActivity() {
         setContent {
             PnandroidTheme {
 
-                ComposableLifecycle { _, event ->
+                val images = remember {
+                    mutableStateListOf(
+                        "https://upload.wikimedia.org/wikipedia/commons/1/16/Saul_Goodman.jpg",
+                        "https://upload.wikimedia.org/wikipedia/commons/1/16/Saul_Goodman.jpg",
+                        "https://upload.wikimedia.org/wikipedia/commons/1/16/Saul_Goodman.jpg",
+                    )
                 }
 
-                // A surface container using the 'background' color from the theme
-                Surface(
+                ImageGallery(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
+                    count = images.size,
+                    imageLoader = { index ->
+                        val image = images[index]
+                        rememberCoilImagePainter(image = image)
+                    }
+                )
+
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+fun rememberCoilImagePainter(image: Any): Painter {
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    PnandroidTheme {
-        Greeting("Android")
-    }
+    val imageRequest = ImageRequest.Builder(LocalContext.current)
+        .data(image)
+        .size(coil.size.Size.ORIGINAL)
+        .build()
+
+    return rememberAsyncImagePainter(imageRequest)
 }
