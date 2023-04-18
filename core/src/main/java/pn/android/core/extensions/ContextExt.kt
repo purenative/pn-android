@@ -18,6 +18,10 @@ const val HTTPS_PLAY_GOOGLE_COM_ID = "https://play.google.com/store/apps/details
 inline fun <reified T : Activity> Context.open() =
     startActivity(Intent(this, T::class.java))
 
+inline fun Context.startActivity(action: String, configIntent: Intent.() -> Unit = {}) {
+    startActivity(Intent(action).apply(configIntent))
+}
+
 fun Context.showToast(text: String, duration: Int = Toast.LENGTH_LONG) {
     Toast.makeText(this, text, duration).show()
 }
