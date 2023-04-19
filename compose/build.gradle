@@ -24,6 +24,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -44,6 +45,8 @@ android {
 
 dependencies {
 
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_version"
+
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version"
 
     implementation platform("androidx.compose:compose-bom:$compose_bom_version")
@@ -62,6 +65,8 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
+
+    implementation "com.kizitonwose.calendar:compose:$calendar_version"
 
 }
 
