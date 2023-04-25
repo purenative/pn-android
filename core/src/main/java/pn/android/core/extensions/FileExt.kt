@@ -1,11 +1,36 @@
 package pn.android.core.extensions
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
 import java.io.File
+import java.io.FileOutputStream
+import java.util.*
 import kotlin.math.min
+
+fun File.scaleImage(context: Context, scaleTo: Int = 64): File? {
+
+    val bmOptions = BitmapFactory.Options().apply {
+        inJustDecodeBounds = false
+    }
+
+    val originalBitmap = BitmapFactory.decodeFile(absolutePath,  bmOptions) ?: return null
+    val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, scaleTo, scaleTo, true)
+    val rotatedBitmap = modifyOrientation(scaledBitmap, absolutePath)
+
+    val tempFile = File(context.filesDir, "${UUID.randomUUID()}.jpg")
+    tempFile.createNewFile()
+
+    FileOutputStream(tempFile).use {
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 75, it)
+        rotatedBitmap.recycle()
+    }
+
+    return tempFile
+
+}
 
 fun File.resizeImage(scaleTo: Int = 128): File? {
     val bmOptions = BitmapFactory.Options().apply {
