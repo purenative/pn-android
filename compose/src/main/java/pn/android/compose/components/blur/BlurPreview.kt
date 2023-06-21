@@ -3,7 +3,6 @@ package pn.android.compose.components.blur
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,14 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.cloudy.Cloudy
-import pn.android.compose.R
 
 var radius = 0f
 
@@ -176,48 +173,48 @@ fun BlurExample() {
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.White, shape = RoundedCornerShape(12))
-                    .padding(20.dp)
-            ) {
-
-                Text(
-                    textAlign = TextAlign.Center,
-                    text = "Blur with picture(radius = 10):",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                ) {
-
-                    Image(
-                        modifier = Modifier.fillMaxWidth(),
-                        painter = painterResource(id = R.drawable.saulgoodman),
-                        contentDescription = null,
-                    )
-
-                    Spacer(modifier = Modifier.height(15.dp))
-
-                    Cloudy(
-                        radius = 10,
-                        key1 = scrollState
-                    ) {
-                        Image(
-                            modifier = Modifier.fillMaxWidth(),
-                            painter = painterResource(id = R.drawable.saulgoodman),
-                            contentDescription = null,
-                        )
-                    }
-                }
-            }
+//            Spacer(modifier = Modifier.height(20.dp))
+//
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .background(color = Color.White, shape = RoundedCornerShape(12))
+//                    .padding(20.dp)
+//            ) {
+//
+//                Text(
+//                    textAlign = TextAlign.Center,
+//                    text = "Blur with picture(radius = 10):",
+//                    fontSize = 18.sp,
+//                    fontWeight = FontWeight.Bold,
+//                )
+//
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 20.dp),
+//                ) {
+//
+//                    Image(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        painter = painterResource(id = R.drawable.saulgoodman),
+//                        contentDescription = null,
+//                    )
+//
+//                    Spacer(modifier = Modifier.height(15.dp))
+//
+//                    Cloudy(
+//                        radius = 10,
+//                        key1 = scrollState
+//                    ) {
+//                        Image(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            painter = painterResource(id = R.drawable.saulgoodman),
+//                            contentDescription = null,
+//                        )
+//                    }
+//                }
+//            }
         }
     }
 }
