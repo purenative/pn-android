@@ -3,6 +3,7 @@ package pn.android.compose.components.blur
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,12 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.cloudy.Cloudy
+import pn.android.compose.R
 
 var radius = 0f
 
@@ -42,6 +45,7 @@ fun BlurExample() {
             easing = LinearOutSlowInEasing
         )
     )
+    val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +53,9 @@ fun BlurExample() {
             .padding(start = 20.dp, end = 20.dp, top = 20.dp)
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -76,7 +82,7 @@ fun BlurExample() {
                     modifier = Modifier.padding(top = 20.dp),
                     radius = castFloatToInt(radiusValueBySlider),
                 ) {
-                    GradientBlock(modifier = Modifier, text = "Blur 1")
+                    GradientBlock(text = "Blur 1")
                 }
             }
 
@@ -130,7 +136,7 @@ fun BlurExample() {
                     key1 = key1Value,
                     key2 = key2Value,
                 ) {
-                    GradientBlock(modifier = Modifier, text = "Blur 2")
+                    GradientBlock(text = "Blur 2")
                 }
             }
 
@@ -150,7 +156,9 @@ fun BlurExample() {
                     fontWeight = FontWeight.Bold,
                 )
 
-                Button(modifier = Modifier.padding(top = 20.dp), onClick = { animationPlayed = true }) {
+                Button(
+                    modifier = Modifier.padding(top = 20.dp),
+                    onClick = { animationPlayed = true }) {
                     Text(
                         textAlign = TextAlign.Center,
                         text = "Changing state by giving allowAccumulate parameter",
@@ -164,7 +172,50 @@ fun BlurExample() {
                     radius = animatedRadius,
                     allowAccumulate = { true }
                 ) {
-                    GradientBlock(modifier = Modifier, text = "Blur 3")
+                    GradientBlock(text = "Blur 3")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.White, shape = RoundedCornerShape(12))
+                    .padding(20.dp)
+            ) {
+
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = "Blur with picture(radius = 10):",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                ) {
+
+                    Image(
+                        modifier = Modifier.fillMaxWidth(),
+                        painter = painterResource(id = R.drawable.saulgoodman),
+                        contentDescription = null,
+                    )
+
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Cloudy(
+                        radius = 10,
+                        key1 = scrollState
+                    ) {
+                        Image(
+                            modifier = Modifier.fillMaxWidth(),
+                            painter = painterResource(id = R.drawable.saulgoodman),
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
         }
@@ -172,7 +223,7 @@ fun BlurExample() {
 }
 
 @Composable
-private fun GradientBlock(modifier: Modifier, text: String) {
+private fun GradientBlock(modifier: Modifier = Modifier, text: String) {
     Box(
         modifier = modifier
             .background(
