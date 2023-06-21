@@ -49,6 +49,8 @@ dependencies {
 
     implementation "com.android.billingclient:billing-ktx:$billing_version"
 
+    implementation "com.github.skydoves:cloudy:$cloudy_version"
+
 }
 
 publishing {
