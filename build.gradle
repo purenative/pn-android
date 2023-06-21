@@ -27,6 +27,8 @@ buildscript {
         billing_version = '5.2.0'
         calendar_version = '2.3.0'
 
+        cloudy_version = '0.1.2'
+
         library_version = '2023.04.00'
         group_id = 'com.github.purenative.pn-android'
     }
