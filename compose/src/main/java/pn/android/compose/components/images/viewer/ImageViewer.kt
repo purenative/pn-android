@@ -40,6 +40,7 @@ const val DEFAULT_ROTATION = 0F
 const val MIN_SCALE = 0.5F
 const val MAX_SCALE_RATE = 3.2F
 
+// Minimum distance between finger gestures
 const val MIN_GESTURE_FINGER_DISTANCE = 200
 
 class ImageViewerState(
@@ -49,26 +50,42 @@ class ImageViewerState(
     rotation: Float = DEFAULT_ROTATION,
 ) : CoroutineScope by MainScope() {
 
+    // x offset
     val offsetX = Animatable(offsetX)
+    // у offset
     val offsetY = Animatable(offsetY)
 
-
+    // Increasing the picture size
     val scale = Animatable(scale)
+    // Rotation
     val rotation = Animatable(rotation)
 
+    // Container size
     internal var containerSize by mutableStateOf(IntSize(0, 0))
+    // Default display size
     internal var defaultSize by mutableStateOf(IntSize(0, 0))
 
+    // Maximum zoom
     internal var maxScale by mutableStateOf(1F)
 
+    // Whether the flag is from the splash screen, it will become true after the screen is rotated internal var fromSaver = false
     internal var fromSaver = false
+
+    // Recovered timestamp
     internal var resetTimeStamp by mutableStateOf(0L)
 
 
+    /**
+     * Detect if animation is running
+     * @return Boolean
+     */
     internal fun isRunning(): Boolean {
         return scale.isRunning || offsetX.isRunning || offsetY.isRunning || rotation.isRunning
     }
 
+    /**
+     * Revert to default
+     * */
     suspend fun reset() {
         coroutineScope {
             launch {
@@ -90,9 +107,11 @@ class ImageViewerState(
         }
     }
 
-
+    /**
+     * Zoom to the max
+     */
     suspend fun scaleToMax(offset: Offset) {
-
+        // Calculate the x and y offsets and dimensions and make sure you don't go out of bounds while zooming in
         var bcx = (containerSize.width / 2 - offset.x) * maxScale
         val boundX = getBound(defaultSize.width.toFloat() * maxScale, containerSize.width.toFloat())
         bcx = limitToBound(bcx, boundX)
@@ -101,7 +120,7 @@ class ImageViewerState(
         val boundY =
             getBound(defaultSize.height.toFloat() * maxScale, containerSize.height.toFloat())
         bcy = limitToBound(bcy, boundY)
-
+        // Start
         coroutineScope {
             launch {
                 scale.animateTo(maxScale)
@@ -116,7 +135,11 @@ class ImageViewerState(
 
     }
 
+    /**
+     * Zoom in or out
+     */
     suspend fun toggleScale(offset: Offset) {
+        //If not equal to 1, set it back to 1
         if (scale.value != 1F) {
             reset()
         } else {
@@ -124,6 +147,9 @@ class ImageViewerState(
         }
     }
 
+    /**
+     * Limit zoom
+     */
     suspend fun fixToBound() {
         val boundX =
             getBound(defaultSize.width.toFloat() * scale.value, containerSize.width.toFloat())
@@ -161,6 +187,10 @@ fun rememberViewerState(
     ImageViewerState(offsetX, offsetY, scale, rotation)
 }
 
+/**
+ * compose fun with box with image. The image can be zoomed by double tapping or tapping with two fingers at the same time and spreading them apart
+ * [model] supports Painter、ImageBitmap、ImageVector、BitmapRegionDecoder
+ */
 @Composable
 fun ImageViewer(
     modifier: Modifier = Modifier,
@@ -174,35 +204,52 @@ fun ImageViewer(
     rotationEnabled: Boolean = false,
 ) {
     val scope = rememberCoroutineScope()
+
+    // Center position when touched
     var centroid by remember { mutableStateOf(Offset.Zero) }
 
+    // Ease motion animation curve
     val decay = remember {
         FloatExponentialDecaySpec(2f).generateDecayAnimationSpec<Float>()
     }
 
     var velocityTracker = remember { VelocityTracker() }
+    // Count the number of fingers in the touch event
     var eventChangeCount by remember { mutableStateOf(0) }
+    // Last offset move
     var lastPan by remember { mutableStateOf(Offset.Zero) }
 
+    // Realtime Gesture Offset Range
     var boundX by remember { mutableStateOf(0F) }
     var boundY by remember { mutableStateOf(0F) }
 
+    // Maximum zoom speed, when double clicked it will increase to this value.
     var maxScale by remember { mutableStateOf(1F) }
+    // Maximum display scaling speed. Once the zoom speed exceeds this value, it will automatically return to this value after the gesture ends.
     val maxDisplayScale by remember { derivedStateOf { maxScale * MAX_SCALE_RATE } }
 
+    // Target offset
     var desX by remember { mutableStateOf(0F) }
     var desY by remember { mutableStateOf(0F) }
 
     var desScale by remember { mutableStateOf(1F) }
+    // Value before rescaling
     var fromScale by remember { mutableStateOf(1F) }
+    // Scale factor used to calculate borders
     var boundScale by remember { mutableStateOf(1F) }
+    // Target Rotation Angle
     var desRotation by remember { mutableStateOf(0F) }
 
+    // Add Angle To Rotate
     var rotate by remember { mutableStateOf(0F) }
+    // Value for zoom
     var zoom by remember { mutableStateOf(1F) }
 
+    // Distance between two fingers
     var fingerDistanceOffset by remember { mutableStateOf(Offset.Zero) }
 
+
+    // Synchronize parameters des. When switching the image in the gallery after zooming out, gesture commands are still accepted, so the parameters after zooming out need to be synchronized
     fun asyncDesParams() {
         desX = state.offsetX.value
         desY = state.offsetY.value
@@ -231,8 +278,11 @@ fun ImageViewer(
                 asyncDesParams()
             },
             gestureEnd = { transformOnly ->
+                // transformOnly records if there is an offset in the gesture event, if it's just a click or double click it will return false
+                // If it is in the animation, do not perform subsequent actions, such as: when executing the reset command
                 if (transformOnly && !state.isRunning()) {
 
+                    // Handle the case when the point added by the acceleration is empty
                     var velocity = try {
                         velocityTracker.calculateVelocity()
                     } catch (e: Exception) {
@@ -240,6 +290,8 @@ fun ImageViewer(
                         null
                     }
 
+                    // If the scale factor is less than 1, it will automatically revert to 1
+                    // If the scaling factor is greater than the maximum display scaling factor, set it back and avoid speedup.
                     val scale = when {
                         state.scale.value < 1 -> 1F
                         state.scale.value > maxDisplayScale -> {
@@ -249,6 +301,8 @@ fun ImageViewer(
                         else -> null
                     }
 
+                    // If the offset is out of range at this time, animate back into the range
+                    // If it's not out of range, set the animation range and then perform the throw animation.
                     scope.launch {
                         if (inBound(state.offsetX.value, boundX) && velocity != null) {
                             val vx = sameDirection(lastPan.x, velocity.x)
@@ -306,12 +360,15 @@ fun ImageViewer(
                 }
             },
         ) { center, pan, _zoom, _rotate, event ->
+            // Only the maximum number of fingers is recorded here
             if (event.changes.size > eventChangeCount) eventChangeCount = event.changes.size
+            // If the number of fingers changes from multiple to one, end the gesture operation.
             if (eventChangeCount > event.changes.size) return@RawGesture false
 
             rotate = _rotate
             zoom = _zoom
 
+            // In the case of two fingers, when the distance between the fingers is less than a certain value, the zoom and rotate values will be at the maximum, so don't bother zooming and rotating in this case
             if (event.changes.size == 2) {
                 fingerDistanceOffset = event.changes[0].position - event.changes[1].position
                 if (
@@ -323,13 +380,19 @@ fun ImageViewer(
                 }
             }
 
+            // Last offset
             lastPan = pan
+            // The middle of the gesture
             centroid = center
+            // Current scaling factor
             fromScale = desScale
+            // Target increase
             desScale *= zoom
 
+            // Check the minimum increase
             if (desScale < MIN_SCALE) desScale = MIN_SCALE
 
+            // Calculate border. If the target scaling value is greater than the maximum display scaling value, the border will be calculated with the maximum scaling value, otherwise it will fail to return when the gesture ends.
             boundScale = if (desScale > maxDisplayScale) maxDisplayScale else desScale
             boundX =
                 getBound(boundScale * state.defaultSize.width, state.containerSize.width.toFloat())
@@ -348,6 +411,9 @@ fun ImageViewer(
                 toScale = desScale,
             ) + pan.x
 
+
+            // If the screen touches are 1 at the same time, it is being dragged and the drag is limited to a range
+            // If there are more than 1 touches on the screen at the same time, i.e. there is a zoom event, scaling of the center point is supported.
             if (eventChangeCount == 1) desX = limitToBound(desX, boundX)
             desY = panTransformAndScale(
                 offset = desY,
@@ -373,6 +439,7 @@ fun ImageViewer(
                 state.rotation.snapTo(desRotation)
             }
 
+            // This evaluates if it has moved to the border, if it has reached the border the event will not be consumed and the top interface will receive the event
             val onLeft = desX >= boundX
             val onRight = desX <= -boundX
             val reachSide = !(onLeft && pan.x > 0) && !(onRight && pan.x < 0) && !(onLeft && onRight)
@@ -383,7 +450,7 @@ fun ImageViewer(
                     }
                 }
             }
-
+            // Return true to move on to the next gesture
             return@RawGesture true
         }
     }
@@ -451,6 +518,9 @@ fun ImageViewer(
     }
 }
 
+/**
+ * Overriding the event listener method
+ * */
 suspend fun PointerInputScope.detectTransformGestures(
     panZoomLock: Boolean = false,
     gestureStart: () -> Unit = {},
@@ -474,7 +544,7 @@ suspend fun PointerInputScope.detectTransformGestures(
             val t0 = System.currentTimeMillis()
             var releasedEvent: PointerEvent? = null
             var moveCount = 0
-            // Начало действия
+            // Start action
             gestureStart()
             do {
                 val event = awaitPointerEvent()
@@ -545,12 +615,18 @@ suspend fun PointerInputScope.detectTransformGestures(
                 lastReleaseTime = t1
             }
 
-            // Конец действия
+            // End of action
             gestureEnd(moveCount != 0)
         }
     }
 }
 
+/**
+ * Make the sign of the next number match the sign of the previous number
+ * @param a Float
+ * @param b Float
+ * @return Float
+ */
 fun sameDirection(a: Float, b: Float): Float {
     return if (a > 0) {
         if (b < 0) {
@@ -567,6 +643,9 @@ fun sameDirection(a: Float, b: Float): Float {
     }
 }
 
+/**
+ * Get moving border
+ * */
 fun getBound(rw: Float, bw: Float): Float {
     return if (rw > bw) {
         var xb = (rw - bw).div(2)
@@ -577,6 +656,9 @@ fun getBound(rw: Float, bw: Float): Float {
     }
 }
 
+/**
+ * Determine if offset is within bounds
+ * */
 fun inBound(offset: Float, bound: Float): Boolean {
     return if (offset > 0) {
         offset < bound
@@ -587,6 +669,9 @@ fun inBound(offset: Float, bound: Float): Boolean {
     }
 }
 
+/**
+ * Restrict movement within boundaries
+ */
 fun limitToBound(offset: Float, bound: Float): Float {
     return when {
         offset > bound -> {
@@ -601,6 +686,9 @@ fun limitToBound(offset: Float, bound: Float): Float {
     }
 }
 
+/**
+ * Tracking the center point while zooming
+ */
 fun panTransformAndScale(
     offset: Float,
     center: Float,

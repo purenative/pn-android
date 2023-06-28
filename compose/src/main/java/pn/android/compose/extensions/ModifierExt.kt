@@ -11,6 +11,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import kotlin.math.*
 
+/**
+ * a function that removes the ripple effect when pressed
+ *
+ * [onClick] - click logic
+ * */
 fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
         interactionSource = remember { MutableInteractionSource() }) {
@@ -18,38 +23,41 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
     }
 }
 
+/**
+ * A function that have to compute length of gradient vector so that it lies within
+    the visible rectangle.
+    --------------------------------------------
+    | length of gradient ^  /                  |
+    |             --->  /  /                   |
+    |                  /  / <- rotation angle  |
+    |                 /  o --------------------|  y
+    |                /  /                      |
+    |               /  /                       |
+    |              v  /                        |
+    --------------------------------------------
+    x
+
+    diagonal angle = atan2(y, x)
+    (it's hard to draw the diagonal)
+
+    Simply rotating the diagonal around the centre of the rectangle
+    will lead to points outside the rectangle area. Further, just
+    truncating the coordinate to be at the nearest edge of the
+    rectangle to the rotated point will distort the angle.
+    Let α be the desired gradient angle (in radians) and γ be the
+    angle of the diagonal of the rectangle.
+    The correct for the length of the gradient is given by:
+    x/|cos(α)|  if -γ <= α <= γ,   or   π - γ <= α <= π + γ
+    y/|sin(α)|  if  γ <= α <= π - γ, or π + γ <= α <= 2π - γ
+    where γ ∈ (0, π/2) is the angle that the diagonal makes with
+    the base of the rectangle.
+
+    [colors] - List of colors to display in gradient style
+    [degrees] - The degree under which the color will be displayed
+ * */
 fun Modifier.angledGradientBackground(colors: List<Color>, degrees: Float) = this.then(
     drawBehind {
-        /*
-        Have to compute length of gradient vector so that it lies within
-        the visible rectangle.
-        --------------------------------------------
-        | length of gradient ^  /                  |
-        |             --->  /  /                   |
-        |                  /  / <- rotation angle  |
-        |                 /  o --------------------|  y
-        |                /  /                      |
-        |               /  /                       |
-        |              v  /                        |
-        --------------------------------------------
-                             x
 
-                   diagonal angle = atan2(y, x)
-                 (it's hard to draw the diagonal)
-
-        Simply rotating the diagonal around the centre of the rectangle
-        will lead to points outside the rectangle area. Further, just
-        truncating the coordinate to be at the nearest edge of the
-        rectangle to the rotated point will distort the angle.
-        Let α be the desired gradient angle (in radians) and γ be the
-        angle of the diagonal of the rectangle.
-        The correct for the length of the gradient is given by:
-        x/|cos(α)|  if -γ <= α <= γ,   or   π - γ <= α <= π + γ
-        y/|sin(α)|  if  γ <= α <= π - γ, or π + γ <= α <= 2π - γ
-        where γ ∈ (0, π/2) is the angle that the diagonal makes with
-        the base of the rectangle.
-
-        */
 
         val (x, y) = size
         val gamma = atan2(y, x)

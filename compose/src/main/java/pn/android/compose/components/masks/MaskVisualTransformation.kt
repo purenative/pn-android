@@ -11,10 +11,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import kotlin.math.absoluteValue
 
+/**
+ * Class that transforms the visual representation of the input value in different views
+ * */
 class MaskVisualTransformation(private val mask: String) : VisualTransformation {
 
     private val specialSymbolsIndices = mask.indices.filter { mask[it] != '#' }
 
+    /**
+     * a function that determines where new values entered into the view will be placed
+     * */
     override fun filter(text: AnnotatedString): TransformedText {
         var out = ""
         var maskIndex = 0
@@ -29,6 +35,9 @@ class MaskVisualTransformation(private val mask: String) : VisualTransformation 
         return TransformedText(AnnotatedString(out), offsetTranslator())
     }
 
+    /**
+     * Provides changed bidirectional offset mapping between original and transformed text
+     * */
     private fun offsetTranslator() = object : OffsetMapping {
         override fun originalToTransformed(offset: Int): Int {
             val offsetValue = offset.absoluteValue
@@ -47,6 +56,9 @@ class MaskVisualTransformation(private val mask: String) : VisualTransformation 
     }
 }
 
+/**
+ * Preview of MaskUsage
+ * */
 @Preview
 @Composable
 private fun MaskUsagePreview() {

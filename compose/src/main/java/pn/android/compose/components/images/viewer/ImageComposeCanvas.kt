@@ -29,7 +29,6 @@ import java.math.RoundingMode
 import java.util.concurrent.LinkedBlockingDeque
 import kotlin.math.absoluteValue
 import kotlin.math.ceil
-
 data class RenderBlock(
     var inBound: Boolean = false,
     var inSampleSize: Int = 1,
@@ -49,7 +48,9 @@ class ImageDecoder(
 
     var decoderHeight by mutableStateOf(0)
         private set
-
+    /**
+     * Decoding block size
+     * */
     var blockSize by mutableStateOf(0)
         private set
 
@@ -58,16 +59,31 @@ class ImageDecoder(
 
     val renderQueue = LinkedBlockingDeque<RenderBlock>()
 
+    /**
+     * Number of horizontal blocks in the gallery
+     * */
     private var countW = 0
 
+    /**
+     * Number of vertical blocks in the gallery
+     * */
     private var countH = 0
 
+    /**
+     * Maximum number of blocks on the longest side
+     * */
     private var maxBlockCount = 0
 
     init {
+        /**
+         * Initialize the maximum number of blocks in the gallery
+         * */
         setMaxBlockCount(1)
     }
 
+    /**
+     * Build a queue of render blocks
+     * */
     private fun getRenderBlockList(): Array<Array<RenderBlock>> {
         var endX: Int
         var endY: Int
@@ -95,6 +111,9 @@ class ImageDecoder(
         }
     }
 
+    /**
+     * Set the maximum number of blocks on the longest side
+     * */
     fun setMaxBlockCount(count: Int): Boolean {
         if (maxBlockCount == count) return false
         maxBlockCount = count
@@ -108,6 +127,9 @@ class ImageDecoder(
         return true
     }
 
+    /**
+     * Iterate over each render unit
+     * */
     fun forEachBlock(action: (block: RenderBlock, column: Int, row: Int) -> Unit) {
         for ((column, rows) in renderList.withIndex()) {
             for ((row, block) in rows.withIndex()) {
@@ -116,12 +138,18 @@ class ImageDecoder(
         }
     }
 
+    /**
+     * Remove all references to the bitmap
+     * */
     fun clearAllBitmap() {
         forEachBlock { block, _, _ ->
             block.bitmap = null
         }
     }
 
+    /**
+     * Free up resources
+     * */
     fun release() {
         synchronized(decoder) {
             if (!decoder.isRecycled) {
@@ -133,6 +161,9 @@ class ImageDecoder(
         }
     }
 
+    /**
+     * decode render region
+     */
     fun decodeRegion(inSampleSize: Int, rect: Rect): Bitmap? {
         synchronized(decoder) {
             return try {
@@ -147,6 +178,9 @@ class ImageDecoder(
         }
     }
 
+    /**
+     * Run a loop that start render in the queue
+     */
     fun startRenderQueue(onUpdate: () -> Unit) {
         launch(Dispatchers.IO) {
             try {
@@ -163,6 +197,9 @@ class ImageDecoder(
     }
 }
 
+/**
+ * Run a loop that start render in the queue
+ */
 @Composable
 fun ImageComposeCanvas(
     modifier: Modifier = Modifier,
@@ -178,27 +215,48 @@ fun ImageComposeCanvas(
 ) {
     val scope = rememberCoroutineScope()
 
+    /**
+     * Container size
+     * */
     var bSize by remember { mutableStateOf(IntSize.Zero) }
 
+    /**
+     * Container aspect ratio
+     * */
     val bRatio by remember { derivedStateOf { bSize.width.toFloat() / bSize.height.toFloat() } }
+
+    /**
+     * Original aspect ratio of the image
+     * */
     val oRatio by remember { derivedStateOf { imageDecoder.decoderWidth.toFloat() / imageDecoder.decoderHeight.toFloat() } }
 
+    /**
+     * Does the width match the size of the container
+     * */
     var widthFixed by remember { mutableStateOf(false) }
 
+    /**
+     * Whether the length and width of the image exceed the length and width of the container
+     * */
     val superSize by remember {
         derivedStateOf {
             imageDecoder.decoderHeight > bSize.height && imageDecoder.decoderWidth > bSize.width
         }
     }
 
+    /**
+     * Default display size
+     * */
     val uSize by remember {
         derivedStateOf {
             if (oRatio > bRatio) {
+                // constant width
                 val uW = bSize.width
                 val uH = uW / oRatio
                 widthFixed = true
                 IntSize(uW, uH.toInt())
             } else {
+                // constant height
                 val uH = bSize.height
                 val uW = uH * oRatio
                 widthFixed = false
@@ -207,6 +265,9 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * Actual display size
+     * */
     val rSize by remember(key1 = scale) {
         derivedStateOf {
             IntSize(
@@ -216,7 +277,11 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * Track container and actual image resizing at the same time
+     * */
     LaunchedEffect(key1 = bSize, key2 = rSize) {
+        //Get the maximum scaling factor
         val maxScale = when {
             superSize -> {
                 imageDecoder.decoderWidth.toFloat() / uSize.width.toFloat()
@@ -228,6 +293,8 @@ fun ImageComposeCanvas(
                 bSize.width.toFloat() / uSize.width.toFloat()
             }
         }
+
+        //Callback
         onSizeChange(
             SizeChangeContent(
                 defaultSize = uSize,
@@ -237,20 +304,46 @@ fun ImageComposeCanvas(
         )
     }
 
+    /**
+     * Determine if high quality rendering is required
+     * */
     val needRenderHeightTexture by remember(key1 = bSize) {
         derivedStateOf {
+            // Current strategy: The area of the source image is larger than the area of the container, so it is necessary to render high-quality images
             BigDecimal(imageDecoder.decoderWidth)
                 .multiply(BigDecimal(imageDecoder.decoderHeight)) > BigDecimal(bSize.height)
                 .multiply(BigDecimal(bSize.width))
         }
     }
 
+    /**
+     * Indicates whether high quality rendering is currently enabled, whether high quality rendering is required, and whether a scale greater than 1 is required.
+     */
     val renderHeightTexture by remember(key1 = scale) { derivedStateOf { needRenderHeightTexture && scale > 1 } }
+
+    /**
+     * Current sample rate
+     * */
     var inSampleSize by remember { mutableStateOf(1) }
+
+    /**
+     * Sampling rate of the smallest graph
+     * */
     var zeroInSampleSize by remember { mutableStateOf(8) }
+
+    /**
+     * Background sample rate
+     * */
     var backGroundInSample by remember { mutableStateOf(0) }
+
+    /**
+     * Background bitmap
+     * */
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
+    /**
+     * Keep track of the actual render size and dynamically change the image sample rate
+     * */
     LaunchedEffect(key1 = rSize) {
         if (scale < 1F) return@LaunchedEffect
         inSampleSize = calculateInSampleSize(
@@ -262,8 +355,12 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * The background updates in real time as the sample rate changes.
+     * */
     LaunchedEffect(key1 = zeroInSampleSize, key2 = inSampleSize, key3 = needRenderHeightTexture) {
         scope.launch(Dispatchers.IO) {
+            // If you don't need to render high quality images, you don't need to render in chunks, just use the current sample rate and use a basemap to render
             val iss = if (needRenderHeightTexture) zeroInSampleSize else inSampleSize
             if (iss == backGroundInSample) return@launch
             backGroundInSample = iss
@@ -279,18 +376,27 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * The background X offset to make sure the image is in the center of the container.
+     * */
     val deltaX by remember(key1 = offsetX, key2 = bSize, key3 = rSize) {
         derivedStateOf {
             offsetX + (bSize.width - rSize.width).toFloat().div(2)
         }
     }
 
+    /**
+     * The background Y offset to make sure the image is in the center of the container.
+     * */
     val deltaY by remember(key1 = offsetY, key2 = bSize, key3 = rSize) {
         derivedStateOf {
             offsetY + (bSize.height - rSize.height).toFloat().div(2)
         }
     }
 
+    /**
+     * Calculates the width of the rectangle in the display area
+     * */
     val rectW by remember(key1 = offsetX) {
         derivedStateOf {
             calcLeftSize(
@@ -301,6 +407,9 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * Calculates the height of the rectangle in the display area
+     * */
     val rectH by remember(key1 = offsetY, key2 = rSize) {
         derivedStateOf {
             calcLeftSize(
@@ -311,6 +420,9 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * Starting X-coordinate of the visible render area
+     * */
     val stX by remember(key1 = offsetX) {
         derivedStateOf {
             val rectDeltaX = getRectDelta(
@@ -323,6 +435,9 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * Starting Y-coordinate of the visible render area
+     * */
     val stY by remember(key1 = offsetY) {
         derivedStateOf {
             val rectDeltaY = getRectDelta(
@@ -335,16 +450,31 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * End X-coordinate calculation
+     * */
     val edX by remember(key1 = offsetX) { derivedStateOf { stX + rectW } }
+    /**
+     * End Y-coordinate calculation
+     * */
     val edY by remember(key1 = offsetY) { derivedStateOf { stY + rectH } }
 
+    /**
+     * The update timestamp used to notify the canvas that the square has been updated.
+     * */
     var renderUpdateTimeStamp by remember { mutableStateOf(0L) }
+    /**
+     * Run decode queue loop
+     * */
     LaunchedEffect(key1 = Unit) {
         imageDecoder.startRenderQueue {
             renderUpdateTimeStamp = System.currentTimeMillis()
         }
     }
 
+    /**
+     * When switching to high-quality rendering, you need to clear the decoding queue and clear all bitmaps
+     * */
     LaunchedEffect(key1 = renderHeightTexture) {
         if (!renderHeightTexture) {
             imageDecoder.renderQueue.clear()
@@ -352,10 +482,24 @@ fun ImageComposeCanvas(
         }
     }
 
+    /**
+     * When switching to high-quality rendering, you need to clear the decoding queue and clear all bitmaps
+     * */
     var calcMaxCountPending by remember { mutableStateOf(false) }
+
+    /**
+     * Previous scale factor
+     * */
     var previousScale by remember { mutableStateOf<Float?>(null) }
+
+    /**
+     * Previous offset
+     * */
     var previousOffset by remember { mutableStateOf<Offset?>(null) }
 
+    /**
+     * Update render unit information
+     * */
     fun updateRenderList() {
         if (calcMaxCountPending) return
         if (previousOffset?.x == offsetX &&
@@ -475,6 +619,9 @@ fun ImageComposeCanvas(
 
     }
 
+    /**
+     * Center of rotation
+     * */
     val rotationCenter by remember(key1 = offsetX, key2 = offsetY, key3 = scale) {
         derivedStateOf {
             val cx = deltaX + rSize.width.div(2)
@@ -514,7 +661,6 @@ fun ImageComposeCanvas(
                     dstOffset = IntOffset(deltaX.toInt(), deltaY.toInt())
                 )
             }
-            // 更新渲染队列
             if (renderUpdateTimeStamp >= 0) updateRenderList()
             if (renderHeightTexture && !calcMaxCountPending) {
                 imageDecoder.forEachBlock { block, _, _ ->
@@ -570,6 +716,7 @@ fun getRectDelta(delta: Float, rSize: Float, bSize: Float, offset: Float): Float
     } else 0F
 }
 
+//Calculates the height of a rectangle in the display area
 fun calcLeftSize(bSize: Float, rSize: Float, offset: Float): Float {
     return if (offset.absoluteValue > (bSize - rSize).div(2).absoluteValue) {
         rSize - (offset.absoluteValue - (bSize - rSize).div(2))

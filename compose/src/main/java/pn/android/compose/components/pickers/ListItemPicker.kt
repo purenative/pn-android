@@ -29,6 +29,14 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+/**
+ * Logic for creating white space between picker list items
+ *
+ * [range] - List with elements for picker
+ * [value] - Choosing element from list
+ * [offset] - white space between elements in float
+ * [halfNumbersColumnHeightPx] - Half column height in pixels
+ * */
 private fun <T> getItemIndexForOffset(
     range: List<T>,
     value: T,
@@ -39,6 +47,17 @@ private fun <T> getItemIndexForOffset(
     return maxOf(0, minOf(indexOf, range.count() - 1))
 }
 
+/**
+ * Compose function that contains a layout that contains a list of elements between which the user wants to choose
+ *
+ * [modifier] - a parameter to change the parent Layout according to the needs of the developer
+ * [label] - logic that takes an element from the list and displays it on the screen as a string
+ * [value] - selected list item
+ * [onValueChange] - logic that happens when another list item is selected on the screen
+ * [dividersColor] - a parameter to select the color of the separator on the screen between list items
+ * [list] - a parameter that contains a list of items to display on the screen
+ * [textStyle] - list item display style
+ * */
 @Composable
 fun <T> ListItemPicker(
     modifier: Modifier = Modifier,
@@ -207,6 +226,12 @@ fun <T> ListItemPicker(
     }
 }
 
+/**
+ * Compose function that contains Text view with a string representation of the list item
+ *
+ * [modifier] - a parameter to change the parent Text according to the needs of the developer
+ * [text] - the string representation of the list item to display
+ * */
 @Composable
 private fun Label(text: String, modifier: Modifier) {
     Text(
@@ -222,6 +247,16 @@ private fun Label(text: String, modifier: Modifier) {
     )
 }
 
+/**
+ * A function that selects the type of animation depending on whether the adjustTarget parameter is null or not
+ *
+ * [initialVelocity] - animation display speed
+ * [animationSpec] - defines the decay animation that will be used for this animation.
+ * Some options for this animationSpec include: androidx.compose .animation.splineBasedDecay and exponentialDecay.
+ * block will be invoked on each animation frame.
+ * [adjustTarget] - the end result of the animation that the animation will aim for
+ * [block] - block will be invoked on each animation frame.
+ * */
 private suspend fun Animatable<Float, AnimationVector1D>.fling(
     initialVelocity: Float,
     animationSpec: DecayAnimationSpec<Float>,
@@ -245,6 +280,9 @@ private suspend fun Animatable<Float, AnimationVector1D>.fling(
     }
 }
 
+/**
+ * Preview of ListItemPicker with food list
+ * */
 @Preview
 @Composable
 fun ListItemPickerPreview() {
@@ -260,6 +298,9 @@ fun ListItemPickerPreview() {
     )
 }
 
+/**
+ * Preview of ListItemPicker with dates list
+ * */
 @Preview
 @Composable
 fun ListItemPickerPreviewDates() {
