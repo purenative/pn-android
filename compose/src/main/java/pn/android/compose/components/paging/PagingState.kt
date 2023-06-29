@@ -13,7 +13,7 @@ data class PagingState(
 ) : Parcelable {
     companion object {
         val EMPTY = PagingState(
-            pageSize = 10,
+            pageSize = 100,
             isLoading = false,
             page = 0,
             endReached = false,
