@@ -280,9 +280,6 @@ private suspend fun Animatable<Float, AnimationVector1D>.fling(
     }
 }
 
-/**
- * Preview of ListItemPicker with food list
- * */
 @Preview
 @Composable
 fun ListItemPickerPreview() {
@@ -298,9 +295,6 @@ fun ListItemPickerPreview() {
     )
 }
 
-/**
- * Preview of ListItemPicker with dates list
- * */
 @Preview
 @Composable
 fun ListItemPickerPreviewDates() {

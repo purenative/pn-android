@@ -217,9 +217,6 @@ private fun CalendarTop(
     }
 }
 
-/**
- * Preview of Calendar
- * */
 @Preview(heightDp = 800)
 @Composable
 private fun CalendarPreview() {

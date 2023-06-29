@@ -56,9 +56,6 @@ class MaskVisualTransformation(private val mask: String) : VisualTransformation 
     }
 }
 
-/**
- * Preview of MaskUsage
- * */
 @Preview
 @Composable
 private fun MaskUsagePreview() {
