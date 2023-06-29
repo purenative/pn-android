@@ -85,7 +85,7 @@ fun PNComponentsNameBlock(modifier: Modifier = Modifier, view: PNComponentsEnum,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = view.viewName,
+            text = view.componentName,
             color = Color.Black,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium

@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PagingState(
     val pageSize: Int,
-    var isLoading: Boolean,
+    val isLoading: Boolean,
     val page: Int,
     val endReached: Boolean,
     val isError: Boolean

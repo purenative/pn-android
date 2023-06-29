@@ -1,6 +1,5 @@
 package pn.android.lazy_column_with_paging
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -24,15 +23,10 @@ import pn.android.compose.components.paging.LazyColumnWithPaging
 import pn.android.compose.components.paging.PagingState
 import pn.android.core.R
 
+val messagesList = arrayListOf<String>()
 @Destination
 @Composable
 fun LazyColumnWithPagingScreen(navigator: DestinationsNavigator) {
-    val messagesList = arrayListOf<String>()
-
-    for (index in 0..10) {
-        messagesList.add("index: $index")
-    }
-
     val pagingState = remember {
         mutableStateOf(PagingState.EMPTY)
     }
@@ -42,6 +36,12 @@ fun LazyColumnWithPagingScreen(navigator: DestinationsNavigator) {
     }
 
     LaunchedEffect(key1 = pagingState) {
+        if (messagesList.isEmpty()) {
+            for (index in 0..10) {
+                messagesList.add("index: $index")
+            }
+        }
+
         messageGetter(pagingState) {
             itemsList.addAll(messagesList)
         }
@@ -74,7 +74,6 @@ fun LazyColumnWithPagingScreen(navigator: DestinationsNavigator) {
             ),
             items = itemsList,
             onLoadNextData = {
-                Log.d("LoadData", "new Data")
                 messageGetter(pagingState) {
                     itemsList.addAll(messagesList)
                 }
@@ -97,11 +96,11 @@ fun ItemBlock(text: String) {
     Spacer(modifier = Modifier.height(10.dp))
 }
 
-fun messageGetter(state: MutableState<PagingState>, onLoadEnd: () -> Unit) {
+fun messageGetter(state: MutableState<PagingState>, loadNextData: () -> Unit) {
     GlobalScope.launch {
         state.value = state.value.copy(isLoading = true)
         delay(2000L)
         state.value = state.value.copy(isLoading = false)
-        onLoadEnd()
+        loadNextData()
     }
 }
