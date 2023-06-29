@@ -6,34 +6,34 @@ Also, libraries of other open access users whose functionality we need have been
 
 ## Appearance, examples and description
 At the moment the sample app looks like this:
-![img.png](readme_pictures/img.png)
+![all.mp4](readme_pictures/all.mp4)
 
 ### [GifImageComponent](./sample/src/main/java/pn/android/gif_image_example/GifImageScreen.kt)
-![img_4.png](readme_pictures/img_4.png)
+![gif_image_example.mp4](readme_pictures/gif_image_example.mp4)
 
 The component is responsible for displaying your GIF
 ### [CalendarScreen](./sample/src/main/java/pn/android/calendar_example/CalendarScreen.kt)
-![img_2.png](readme_pictures/img_2.png)
+![calendar_example.mp4](readme_pictures/calendar_example.mp4)
 
 The component is designed to display a calendar. From the functionality, it is possible to determine the difference in days between two selected dates and clear the result
 ### [PrimaryIndicatorScreen](./sample/src/main/java/pn/android/primary_indicator_example/PrimaryIndicatorScreen.kt)
-![img_3.png](readme_pictures/img_3.png)
+![indicator_example.mp4](readme_pictures/indicator_example.mp4)
 
 The component is designed to display the loading status on the screen
 ### [ListItemPickerScreen](./sample/src/main/java/pn/android/list_item_picker_example/ListItemPickerScreen.kt)
-![img_5.png](readme_pictures/img_5.png)
+![list_item_picker_example.mp4](readme_pictures/list_item_picker_example.mp4)
 
 The component is designed to be able to select from a list of elements of a certain type
 ### [ImageGalleryScreen](./sample/src/main/java/pn/android/image_gallery_example/ImageGalleryScreen.kt)
-![img_6.png](readme_pictures/img_6.png)
+![image_gallery_example.mp4](readme_pictures/image_gallery_example.mp4)
 
 The component is designed to display a gallery of images with the ability to zoom in using a double click or by simultaneously spreading two fingers on the screen
 ### [MaskVisualTransformationScreen](./sample/src/main/java/pn/android/mask_visual_transformation_example/MaskVisualTransformationScreen.kt)
-![img_7.png](readme_pictures/img_7.png)
+![mask_visual_transformation_example.png](readme_pictures/mask_visual_transformation_example.png)
 
 The component is designed to control the input format
 ### [LazyColumnWithPagingScreen](./sample/src/main/java/pn/android/lazy_column_with_paging/LazyColumnWithPagingScreen.kt)
-![img_8.png](readme_pictures/img_8.png)
+![lazy_column_with_paging_example.mp4](readme_pictures/lazy_column_with_paging_example.mp4)
 
 The component is designed to display a list with a large amount of data. 
 To spend much less resources on getting a large amount of data at once,
