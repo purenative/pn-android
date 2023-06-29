@@ -24,7 +24,7 @@ buildscript {
         orbit_version = '4.6.1'
         timber_version = '5.0.1'
         retrofit_version = '2.9.0'
-        coil_version = '2.3.0'
+        coil_version = '2.4.0'
         billing_version = '5.2.0'
         calendar_version = '2.3.0'
 
