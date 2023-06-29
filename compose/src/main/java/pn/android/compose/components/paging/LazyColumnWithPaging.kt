@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import pn.android.compose.components.indicators.PrimaryIndicator
 
 /**
- * View to display vertically scrolling list that only composes and lays out the currently visible items
+ * Component to display vertically scrolling list that only composes and lays out the currently visible items
  * with a request for only a separate limited piece of information from the network.
  * [modifier] - parameter to change the LazyColumn according to the needs of the developer
  * [state] - the state object to be used to control or observe the list's state.

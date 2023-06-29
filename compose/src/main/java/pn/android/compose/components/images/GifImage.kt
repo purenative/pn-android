@@ -14,7 +14,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 
 /**
- * View for displaying a bitmap format of graphic images(Gif)
+ * Component for displaying a bitmap format of graphic images(Gif)
  * [modifier] - parameter to change the Image according to the needs of the developer
  * [url] - contains the identifier of the resource needed to be displayed in the view
  * */

@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * View to display the loader
+ * Component to display the loader
  * [modifier] - parameter to change the CircularProgressIndicator according to the needs of the developer
  * [color] - serves to change the color of the loader
  * [size] - serves to change the size of the loader
