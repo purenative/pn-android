@@ -13,6 +13,12 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
 
+/**
+ * Component for displaying a bitmap format of graphic images(Gif)
+ * [modifier] - parameter to change the Image according to the needs of the developer
+ * [url] - contains the identifier of the resource needed to be displayed in the view
+ * */
+
 @Composable
 fun GifImage(
     modifier: Modifier = Modifier,

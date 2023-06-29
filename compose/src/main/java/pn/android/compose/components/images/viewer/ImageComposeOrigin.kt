@@ -54,20 +54,25 @@ fun ImageComposeOrigin(
     onSizeChange: suspend (SizeChangeContent) -> Unit = {},
     boundClip: Boolean = true,
 ) {
+    // Container size
     var bSize by remember { mutableStateOf(IntSize(0, 0)) }
+    // Container factor
     val bRatio by remember { derivedStateOf { bSize.width.toFloat() / bSize.height.toFloat() } }
-
+    // Original image size
     var oSize by remember { mutableStateOf(IntSize(0, 0)) }
+    // Original image ratio
     val oRatio by remember { derivedStateOf { oSize.width.toFloat() / oSize.height.toFloat() } }
 
+    // Does the width match the size of the container
     var widthFixed by remember { mutableStateOf(false) }
-
+    // Whether the length and width exceed the length and width of the container
     val superSize by remember {
         derivedStateOf {
             oSize.height > bSize.height && oSize.width > bSize.width
         }
     }
 
+    // Display size
     val uSize by remember {
         derivedStateOf {
             if (oRatio > bRatio) {
@@ -86,6 +91,7 @@ fun ImageComposeOrigin(
         }
     }
 
+    // Variable for actual photo size
     val rSize by remember {
         derivedStateOf {
             IntSize(
@@ -116,6 +122,7 @@ fun ImageComposeOrigin(
         )
     }
 
+    // Image uploaded successfully or not
     var imageSpecified by remember { mutableStateOf(false) }
 
     when (model) {
@@ -146,7 +153,7 @@ fun ImageComposeOrigin(
                 model.height
             )
         }
-        else -> throw Exception("不支持这种类型的数据！")
+        else -> throw Exception("Data of this type is not supported！")
     }
 
     Box(

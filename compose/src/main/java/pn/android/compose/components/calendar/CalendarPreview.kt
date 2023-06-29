@@ -30,6 +30,12 @@ import java.time.YearMonth
 
 private val primaryColor = Color.Black.copy(alpha = 0.9f)
 
+/**
+ * a layout compose function that displays the structure of a calendar,
+ * with the ability to select two dates and calculate the number of days between them.
+ * This data is displayed in the header of the calendar.
+ * It is also possible to clear the header of the calendar to display the initial state
+ * */
 @Composable
 fun CalendarExample() {
 
@@ -83,6 +89,14 @@ fun CalendarExample() {
     }
 }
 
+/**
+ * A layout composable that places box with number of the day of the month
+ *
+ * [day] - parameter containing data about the day of the month
+ * [today] - parameter containing data about today
+ * [onClick] - logic that happens when you click on the day of the month
+ * */
+
 @Composable
 private fun Day(
     day: CalendarDay,
@@ -110,6 +124,12 @@ private fun Day(
 
 }
 
+/**
+ * A layout composable that places box with title in Month Year format
+ *
+ * [calendarMonth] - parameter containing data about the month
+ * */
+
 @Composable
 private fun MonthHeader(calendarMonth: CalendarMonth) {
     Box(
@@ -126,6 +146,16 @@ private fun MonthHeader(calendarMonth: CalendarMonth) {
     }
 }
 
+/**
+ * A layout composable that places column with title with select date on click, clear button for clear title
+ * and days of week in raw
+ *
+ * [modifier] - a parameter to change the parent Column according to the needs of the developer
+ * [daysOfWeek] - list of days of the week
+ * [selection] - a parameter that contains data of two dates selected by the user
+ * to calculate the difference between them and display it
+ * [clearDates] - logic that happens on "Clear" button pressed
+ * */
 @Composable
 private fun CalendarTop(
     modifier: Modifier = Modifier,

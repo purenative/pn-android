@@ -38,18 +38,25 @@ class ImagePreviewerState(
     index: Int = 0,
     show: Boolean = false,
 ) {
-
+    // Photo scroll mode
     enum class ScrollActionType {
         ANIMATE,
         SNAP
     }
 
+    // Current photo number
     var index by mutableStateOf(index)
+    // Display logo
     var show by mutableStateOf(show)
 
+    // Page scroll mode，Don't scroll if null
     internal var scrollActionType by mutableStateOf<ScrollActionType?>(null)
+    // Operations to be done after relinking
     private var nextTicket: (suspend () -> Unit)? = null
 
+    /**
+     * Display
+     */
     fun show(index: Int = 0) {
         if (index < 0) return
         this.index = index
@@ -57,12 +64,18 @@ class ImagePreviewerState(
         scrollActionType = ScrollActionType.SNAP
     }
 
+    /**
+     * Scroll to specified page number
+     */
     fun scrollTo(index: Int) {
         if (index < 0) return
         this.index = index
         scrollActionType = ScrollActionType.ANIMATE
     }
 
+    /**
+     * Hide
+     */
     fun hide() {
         this.show = false
     }
@@ -135,10 +148,12 @@ fun ImagePreviewer(
         } catch (e: Exception) {
             Timber.e(e)
         } finally {
+            // Set the type to null only after the synchronous method (animation) has completed
             state.scrollActionType = null
         }
     }
     LaunchedEffect(key1 = pagerState.currentPage, key2 = state.scrollActionType) {
+        // If the type is not null, then currentPage is in the process of being animated, and currentPage is changing all the time, so this situation should be filtered out
         if (pagerState.currentPage != state.index && state.scrollActionType == null) {
             state.index = pagerState.currentPage
         }
@@ -167,6 +182,7 @@ fun ImagePreviewer(
             onLongPress = onLongPress,
         )
 
+        // Operation to be performed after reflow
         state.ConsumeTicket()
     }
 }
