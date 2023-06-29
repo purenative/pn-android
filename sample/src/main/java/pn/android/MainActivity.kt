@@ -26,7 +26,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import pn.android.compose.components.calendar.clickable
-import pn.android.core.base.PNViewsEnum
+import pn.android.core.base.PNComponentsEnum
 import pn.android.core.extensions.showToast
 import pn.android.destinations.*
 import pn.android.ui.theme.PnandroidTheme
@@ -57,28 +57,28 @@ fun rememberCoilImagePainter(image: Any): Painter {
 }
 
 @Composable
-fun ListPNViews(modifier: Modifier = Modifier, navigator: DestinationsNavigator) {
+fun ListPNComponents(modifier: Modifier = Modifier, navigator: DestinationsNavigator) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
     ) {
-        PNViewsEnum.values().forEach { view ->
-            PNViewsNameBlock(view = view) {
+        PNComponentsEnum.values().forEach { view ->
+            PNComponentsNameBlock(view = view) {
                 navigator.navigate(getScreenDestination(view))
             }
-            Spacer(modifier = Modifier.height(20f.dp))
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
 
 @Composable
-fun PNViewsNameBlock(modifier: Modifier = Modifier, view: PNViewsEnum, onClick: () -> Unit = {}) {
+fun PNComponentsNameBlock(modifier: Modifier = Modifier, view: PNComponentsEnum, onClick: () -> Unit = {}) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = Color.White, shape = RoundedCornerShape(12f.dp))
-            .padding(horizontal = 12f.dp, vertical = 15f.dp)
+            .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+            .padding(horizontal = 12.dp, vertical = 15.dp)
             .clickable {
                 onClick()
             },
@@ -104,27 +104,29 @@ fun MainScreen(navigator: DestinationsNavigator) {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black)
-            .padding(start = 12f.dp, end = 12f.dp, top = 20f.dp)
+            .padding(start = 12.dp, end = 12.dp, top = 20.dp)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
-                text = "Pure Native Views",
+                text = "Pure Native Components",
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(20f.dp))
-            ListPNViews(navigator = navigator)
+            Spacer(modifier = Modifier.height(20.dp))
+            ListPNComponents(navigator = navigator)
         }
     }
 }
 
-fun getScreenDestination(view: PNViewsEnum): DirectionDestination {
+fun getScreenDestination(view: PNComponentsEnum): DirectionDestination {
     return when(view) {
-        PNViewsEnum.GifImageView -> GifImageScreenDestination
-        PNViewsEnum.CalendarView -> CalendarScreenDestination
-        PNViewsEnum.IndicatorView -> PrimaryIndicatorScreenDestination
-        PNViewsEnum.ListItemPickerView -> ListItemPickerScreenDestination
-        PNViewsEnum.ImageGalleryView -> ImageGalleryScreenDestination
+        PNComponentsEnum.GifImageComponent -> GifImageScreenDestination
+        PNComponentsEnum.CalendarComponent -> CalendarScreenDestination
+        PNComponentsEnum.IndicatorComponent -> PrimaryIndicatorScreenDestination
+        PNComponentsEnum.ListItemPickerComponent -> ListItemPickerScreenDestination
+        PNComponentsEnum.ImageGalleryComponent -> ImageGalleryScreenDestination
+        PNComponentsEnum.MaskVisualTransformationComponent -> MaskVisualTransformationScreenDestination
+        PNComponentsEnum.LazyColumnWithPagingComponent -> LazyColumnWithPagingScreenDestination
     }
 }

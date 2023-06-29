@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,20 +25,22 @@ import pn.android.rememberCoilImagePainter
 @Destination
 @Composable
 fun ImageGalleryScreen(navigator: DestinationsNavigator) {
-    val monkeys = listOf(
-        R.drawable.monkey_1,
-        R.drawable.monkey_2,
-        R.drawable.monkey_3,
-        R.drawable.monkey_4,
-        R.drawable.monkey_5
-    )
+    val monkeys = remember {
+        listOf(
+            R.drawable.monkey_1,
+            R.drawable.monkey_2,
+            R.drawable.monkey_3,
+            R.drawable.monkey_4,
+            R.drawable.monkey_5
+        )
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black),
         contentAlignment = Alignment.Center
     ) {
-        ImageGallery(count = 5, imageLoader = { index ->
+        ImageGallery(count = monkeys.size, imageLoader = { index ->
             val monkey = monkeys[index]
             rememberCoilImagePainter(image = monkey)
         })

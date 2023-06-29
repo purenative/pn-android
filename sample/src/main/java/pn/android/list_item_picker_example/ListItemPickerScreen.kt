@@ -23,13 +23,15 @@ import pn.android.core.R
 @Composable
 fun ListItemPickerScreen(navigator: DestinationsNavigator) {
 
-    val possibleValues = listOf(
-        "10 декабря",
-        "11 декабря",
-        "12 декабря",
-        "13 декабря",
-        "14 декабря",
-    )
+    val possibleValues = remember {
+        listOf(
+            "10 декабря",
+            "11 декабря",
+            "12 декабря",
+            "13 декабря",
+            "14 декабря",
+        )
+    }
 
     var state by remember { mutableStateOf(possibleValues[0]) }
 
