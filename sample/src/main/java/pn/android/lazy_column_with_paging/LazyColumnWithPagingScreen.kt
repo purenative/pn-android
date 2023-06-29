@@ -42,7 +42,7 @@ fun LazyColumnWithPagingScreen(navigator: DestinationsNavigator) {
             }
         }
 
-        messageGetter(pagingState) {
+        loadNextData(pagingState) {
             itemsList.addAll(messagesList)
         }
     }
@@ -74,7 +74,7 @@ fun LazyColumnWithPagingScreen(navigator: DestinationsNavigator) {
             ),
             items = itemsList,
             onLoadNextData = {
-                messageGetter(pagingState) {
+                loadNextData(pagingState) {
                     itemsList.addAll(messagesList)
                 }
             }) { _, item ->
@@ -96,11 +96,11 @@ fun ItemBlock(text: String) {
     Spacer(modifier = Modifier.height(10.dp))
 }
 
-fun messageGetter(state: MutableState<PagingState>, loadNextData: () -> Unit) {
+fun loadNextData(state: MutableState<PagingState>, onLoadEnd: () -> Unit) {
     GlobalScope.launch {
         state.value = state.value.copy(isLoading = true)
         delay(2000L)
         state.value = state.value.copy(isLoading = false)
-        loadNextData()
+        onLoadEnd()
     }
 }
