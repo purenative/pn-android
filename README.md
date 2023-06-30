@@ -4,6 +4,14 @@ The bottom line is that these components were often encountered in our projects 
 for the convenience of current and future employees of the company and just people who it would be interesting to look at the functions created by Jetpack Compose.
 Also, libraries of other open access users whose functionality we need have been and will be transferred here.
 
+<strong>Modules</strong>
+### [Core](./core/)
+Common Android things.
+### [Compose](./compose/)
+Jetpack Compose things.
+### [Sample](./sample/)
+Sample App for research and development.
+
 ## Installation
 
 ### Gradle
@@ -25,14 +33,6 @@ dependencies {
 At the moment the sample app looks like this:
 
 <img src="readme_pictures/all.gif" width="50%" height="30%" />
-
-<strong>Modules</strong>
-### [Core](./core/)
-Common Android things.
-### [Compose](./compose/)
-Jetpack Compose things.
-### [Sample](./sample/)
-Sample App for research and development.
 
 <strong>Examples</strong>
 ### [GifImageComponent](./sample/src/main/java/pn/android/gif_image_example/GifImageScreen.kt)
