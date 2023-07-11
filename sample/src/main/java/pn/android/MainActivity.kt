@@ -128,5 +128,6 @@ fun getScreenDestination(view: PNComponentsEnum): DirectionDestination {
         PNComponentsEnum.ImageGalleryComponent -> ImageGalleryScreenDestination
         PNComponentsEnum.MaskVisualTransformationComponent -> MaskVisualTransformationScreenDestination
         PNComponentsEnum.LazyColumnWithPagingComponent -> LazyColumnWithPagingScreenDestination
+        PNComponentsEnum.ShimmerComponent -> ShimmerScreenDestination
     }
 }

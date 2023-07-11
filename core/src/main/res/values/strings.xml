@@ -7,4 +7,6 @@
     <string name="email_client_not_found">Email client not found</string>
     <string name="dialer_not_found">Dialer not found</string>
     <string name="sms_client_not_found">SMS client not found</string>
+    <string name="wasted_click">Wasted(Click)</string>
+    <string name="normal_example">Normal Example</string>
 </resources>
