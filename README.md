@@ -75,3 +75,11 @@ the component suggests dividing this data into smaller pieces and requesting fur
 
 Component of a real screen, where during the loading of data, 
 flickering blocks of the sizes corresponding to these components are displayed in place of the final UI.
+### [ChartComponent](sample/src/main/java/pn/android/charts_example/ChartsScreen.kt)
+<details>
+    <summary>An example of how the component works</summary>
+    <img src="readme_pictures/charts.gif" width="50%" height="30%" />
+</details>
+
+
+The component is designed to display tables
