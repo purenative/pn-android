@@ -83,3 +83,4 @@ flickering blocks of the sizes corresponding to these components are displayed i
 
 
 The component is designed to display tables
+https://patrykandpatrick.com/vico/wiki/ - extremely useful for understanding the api library
