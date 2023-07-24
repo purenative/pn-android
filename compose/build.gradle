@@ -68,6 +68,7 @@ dependencies {
 
     implementation "com.kizitonwose.calendar:compose:$calendar_version"
 
+    implementation "com.valentinilk.shimmer:compose-shimmer:$shimmer_version"
 }
 
 publishing {

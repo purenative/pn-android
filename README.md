@@ -89,3 +89,12 @@ The component is designed to control the input format
 The component is designed to display a list with a large amount of data. 
 To spend much less resources on getting a large amount of data at once,
 the component suggests dividing this data into smaller pieces and requesting further data when approaching the end of the list
+### [ShimmerComponent](sample/src/main/java/pn/android/shimmer_example/ShimmerScreen.kt)
+<details>
+    <summary>An example of how the component works</summary>
+    <img src="readme_pictures/shimmer.gif" width="50%" height="30%" />
+</details>
+
+
+Component of a real screen, where during the loading of data, 
+flickering blocks of the sizes corresponding to these components are displayed in place of the final UI.
