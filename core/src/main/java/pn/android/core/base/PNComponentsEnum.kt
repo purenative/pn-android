@@ -8,5 +8,6 @@ enum class PNComponentsEnum(val componentName: String) {
     ImageGalleryComponent(componentName = "ImageGalleryComponent"),
     MaskVisualTransformationComponent(componentName = "MaskVisualTransformationComponent"),
     LazyColumnWithPagingComponent(componentName = "LazyColumnWithPagingComponent"),
-    ShimmerComponent(componentName = "ShimmerComponent")
+    ShimmerComponent(componentName = "ShimmerComponent"),
+    ChartsComponent(componentName = "ChartsComponent")
 }
