@@ -50,7 +50,8 @@ fun MaskVisualTransformationScreen(navigator: DestinationsNavigator) {
         OutlinedTextField(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 100.dp),
+                .padding(top = 100.dp)
+                .background(color = Color.DarkGray),
             value = text,
             onValueChange = { it ->
                 if (it.length <= maskLength) {
