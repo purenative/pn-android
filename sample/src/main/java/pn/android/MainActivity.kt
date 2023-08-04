@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -86,9 +87,10 @@ fun PNComponentsNameBlock(modifier: Modifier = Modifier, view: PNComponentsEnum,
     ) {
         Text(
             text = view.componentName,
-            color = Color.Black,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            style = LocalTextStyle.current.copy(color = Color.Black),
+            color = Color.Black
         )
         Icon(
             painter = painterResource(id = pn.android.core.R.drawable.ic_arrow_right_24_black),
@@ -128,5 +130,7 @@ fun getScreenDestination(view: PNComponentsEnum): DirectionDestination {
         PNComponentsEnum.ImageGalleryComponent -> ImageGalleryScreenDestination
         PNComponentsEnum.MaskVisualTransformationComponent -> MaskVisualTransformationScreenDestination
         PNComponentsEnum.LazyColumnWithPagingComponent -> LazyColumnWithPagingScreenDestination
+        PNComponentsEnum.ShimmerComponent -> ShimmerScreenDestination
+        PNComponentsEnum.ChartsComponent -> ChartsScreenDestination
     }
 }

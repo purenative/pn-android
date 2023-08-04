@@ -27,6 +27,8 @@ buildscript {
         coil_version = '2.3.0'
         billing_version = '5.2.0'
         calendar_version = '2.3.0'
+        shimmer_version = '1.0.5'
+        chart_version = '1.7.1'
 
         library_version = '2023.04.00'
         group_id = 'com.github.purenative.pn-android'

@@ -86,4 +86,7 @@ dependencies {
 
     implementation "io.github.raamcosta.compose-destinations:core:$compose_destinations_version"
     ksp "io.github.raamcosta.compose-destinations:ksp:$compose_destinations_version"
+
+    implementation "com.valentinilk.shimmer:compose-shimmer:$shimmer_version"
+    implementation "com.patrykandpatrick.vico:compose:$chart_version"
 }

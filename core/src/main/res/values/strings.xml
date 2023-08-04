@@ -7,4 +7,15 @@
     <string name="email_client_not_found">Email client not found</string>
     <string name="dialer_not_found">Dialer not found</string>
     <string name="sms_client_not_found">SMS client not found</string>
+    <string name="wasted_click">Wasted(Click)</string>
+    <string name="normal_example">Normal Example</string>
+    <string name="simple_line_chart">Simple line chart</string>
+    <string name="simple_column_chart">Simple column chart</string>
+    <string name="simple_composed_chart">Simple composed chart</string>
+    <string name="simple_line_chart_with_marker">Simple line chart with marker</string>
+    <string name="custom_line_chart">Custom line chart</string>
+    <string name="simple_column_chart_with_thread">Simple column chart with thread</string>
+    <string name="start_of_production">0 - start of production</string>
+    <string name="end_of_production">3 - end of production</string>
+    <string name="marker_shown">Marker shown</string>
 </resources>
